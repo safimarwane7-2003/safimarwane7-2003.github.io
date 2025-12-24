@@ -3,241 +3,390 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RETRO // SYSTEM</title>
+    <title>MARWANE SAFI // SYSTEM</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     
     <style>
+        /* --- CSS RESET & VARIABLES --- */
         :root {
-            --bg-color: #050505;
-            --neon-pink: #ff00ff;
-            --neon-cyan: #00ffff;
-            --neon-green: #00ff00;
-            --text-color: #e0e0e0;
-            --card-bg: #111;
+            --bg-color: #0d0d0d;
+            --glass-bg: rgba(20, 20, 20, 0.85);
+            --neon-pink: #ff0055;
+            --neon-blue: #00f3ff;
+            --neon-green: #0aff00;
+            --text-main: #e0e0e0;
+            --scanline-color: rgba(0, 0, 0, 0.5);
         }
 
-        * {
-            box-sizing: border-box;
-        }
-
+        * { box-sizing: border-box; }
+        
         body {
             margin: 0;
-            padding: 0;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--text-main);
             font-family: 'VT323', monospace;
             font-size: 20px;
             overflow-x: hidden;
-        }
-
-        /* The "Scanline" effect overlay */
-        body::after {
-            content: "";
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
             height: 100vh;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0, 0, 0, 0.15),
-                rgba(0, 0, 0, 0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 999;
-        }
-
-        /* Container with the pink border frame */
-        .main-wrapper {
-            max-width: 900px;
-            margin: 20px auto;
-            border: 4px double var(--neon-pink);
-            box-shadow: 0 0 15px var(--neon-pink), inset 0 0 15px var(--neon-pink);
-            padding: 20px;
-            background: #000;
-            min-height: 95vh;
             display: flex;
             flex-direction: column;
         }
 
-        /* HEADER */
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-            border-bottom: 2px solid var(--neon-cyan);
-            padding-bottom: 20px;
+        /* --- BACKGROUND MATRIX EFFECT --- */
+        #canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
         }
 
-        h1 {
-            font-size: 4rem;
-            margin: 0;
-            color: var(--neon-cyan);
-            text-shadow: 4px 4px 0px var(--neon-pink);
-            letter-spacing: 5px;
-            text-transform: uppercase;
+        /* --- CRT SCANLINE OVERLAY --- */
+        .scanlines {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+            z-index: 100;
         }
 
-        .subtitle {
-            color: var(--neon-green);
-            font-size: 1.2rem;
-            margin-top: 10px;
-        }
-
-        /* NAVIGATION */
-        nav {
+        /* --- MAIN CONTAINER --- */
+        .interface {
+            width: 95%;
+            max-width: 1000px;
+            margin: 20px auto;
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px rgba(0, 243, 255, 0.2);
+            background: var(--glass-bg);
+            border-radius: 10px;
             display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 40px;
+            flex-direction: column;
+            height: 90vh;
+            position: relative;
+            backdrop-filter: blur(5px);
         }
 
-        .nav-btn {
-            background: var(--neon-pink);
-            color: #000;
-            padding: 10px 25px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.2rem;
-            text-transform: uppercase;
-            box-shadow: 4px 4px 0px var(--neon-cyan);
-            transition: transform 0.1s;
-        }
-
-        .nav-btn:active {
-            transform: translate(2px, 2px);
-            box-shadow: 2px 2px 0px var(--neon-cyan);
-        }
-
-        .nav-btn.secondary {
-            background: transparent;
-            color: var(--neon-cyan);
-            border: 2px solid var(--neon-cyan);
-            box-shadow: none;
-        }
-
-        .nav-btn.secondary:hover {
-            background: rgba(0, 255, 255, 0.1);
-            box-shadow: 0 0 10px var(--neon-cyan);
-        }
-
-        /* GRID CONTENT */
-        .content-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 20px;
-        }
-
-        @media (min-width: 600px) {
-            .content-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        .card {
-            border: 2px solid var(--neon-green);
+        /* --- HEADER --- */
+        header {
+            border-bottom: 2px solid var(--neon-blue);
             padding: 20px;
-            background: var(--card-bg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            animation: flicker 3s infinite;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .status {
+            font-size: 1rem;
+            color: var(--neon-green);
+        }
+
+        .blink { animation: blink 1s infinite; }
+
+        /* --- NAVIGATION --- */
+        nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            border-bottom: 2px solid var(--neon-blue);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            border-right: 1px solid var(--neon-blue);
+            color: var(--text-main);
+            font-family: 'VT323', monospace;
+            font-size: 1.5rem;
+            padding: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-transform: uppercase;
+        }
+
+        nav button:last-child { border-right: none; }
+        
+        nav button:hover, nav button.active {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        /* --- CONTENT AREA --- */
+        .screen {
+            flex-grow: 1;
+            padding: 30px;
+            overflow-y: auto;
             position: relative;
         }
 
-        .card h2 {
-            color: var(--neon-green);
+        .page {
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .page.active { display: block; }
+
+        h2 {
+            font-size: 3rem;
             margin-top: 0;
-            border-bottom: 1px dashed var(--neon-green);
-            padding-bottom: 10px;
-            font-size: 1.8rem;
-        }
-
-        .card p {
-            line-height: 1.4;
-            font-size: 1.1rem;
-        }
-
-        .action-btn {
+            color: var(--neon-pink);
+            text-shadow: 2px 2px 0px #fff;
+            border-bottom: 2px dashed var(--neon-pink);
             display: inline-block;
-            margin-top: 15px;
-            background: var(--neon-green);
-            color: #000;
-            padding: 8px 16px;
-            text-decoration: none;
-            font-weight: bold;
         }
 
-        /* TERMINAL FOOTER */
-        .terminal-footer {
-            margin-top: auto;
-            border-top: 2px dashed var(--neon-text);
-            padding-top: 20px;
-            font-family: monospace;
-            color: var(--neon-cyan);
+        /* --- COMPONENT: TYPING TEXT --- */
+        .type-wrap {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+            max-width: 800px;
         }
 
-        .cursor {
-            display: inline-block;
-            width: 10px;
+        /* --- COMPONENT: SKILL BARS --- */
+        .skill-container { margin: 20px 0; }
+        .skill-label { margin-bottom: 5px; color: var(--neon-green); }
+        .progress-bar {
+            width: 100%;
             height: 20px;
-            background: var(--neon-cyan);
-            animation: blink 1s infinite;
-            vertical-align: middle;
+            background: #222;
+            border: 1px solid var(--neon-green);
+            margin-bottom: 15px;
+        }
+        .fill {
+            height: 100%;
+            background: var(--neon-green);
+            width: 0%;
+            box-shadow: 0 0 10px var(--neon-green);
+            transition: width 1s ease-out;
         }
 
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
+        /* --- COMPONENT: PROJECT CARDS --- */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            border: 1px solid var(--neon-pink);
+            padding: 15px;
+            background: rgba(255, 0, 85, 0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 0, 85, 0.15);
+            box-shadow: 0 0 15px var(--neon-pink);
+        }
+        .card h3 { color: var(--neon-blue); margin-top: 0; }
+        
+        /* --- FOOTER --- */
+        footer {
+            border-top: 2px solid var(--neon-blue);
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
         }
 
-        /* Responsive Mobile Tweaks */
+        /* --- ANIMATIONS --- */
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes flicker {
+            0% { opacity: 1; } 3% { opacity: 0.4; } 6% { opacity: 1; } 7% { opacity: 0.4; } 8% { opacity: 1; }
+            9% { opacity: 1; } 10% { opacity: 0.1; } 11% { opacity: 1; } 100% { opacity: 1; }
+        }
+
+        /* --- MOBILE TWEAKS --- */
         @media (max-width: 600px) {
-            h1 { font-size: 2.5rem; }
-            .main-wrapper { margin: 10px; border-width: 2px; }
-            .nav-btn { width: 100%; text-align: center; }
+            .interface { height: 95vh; margin: 10px auto; width: 95%; }
+            nav button { font-size: 1rem; padding: 10px 0; }
+            h2 { font-size: 2rem; }
+            .logo { font-size: 1.8rem; } /* Adjusted size for long names on mobile */
         }
     </style>
 </head>
 <body>
 
-    <div class="main-wrapper">
+    <canvas id="canvas"></canvas>
+    <div class="scanlines"></div>
+
+    <div class="interface">
         <header>
-            <h1>MARWANE SAFI </h1>
-            <div class="subtitle">EST. 1999 // SYSTEM READY_</div>
+            <div class="logo">MARWANE SAFI</div>
+            <div class="status">SYS: ONLINE <span class="blink">●</span></div>
         </header>
 
         <nav>
-            <a href="#" class="nav-btn">Home</a>
-            <a href="#" class="nav-btn secondary">Projects</a>
-            <a href="#" class="nav-btn secondary">About</a>
-            <a href="#" class="nav-btn">Contact</a>
+            <button onclick="showPage('home')" class="active" id="btn-home">HOME</button>
+            <button onclick="showPage('about')" id="btn-about">ABOUT</button>
+            <button onclick="showPage('projects')" id="btn-projects">WORK</button>
+            <button onclick="showPage('contact')" id="btn-contact">COMM</button>
         </nav>
 
-        <div class="content-grid">
-            <div class="card">
-                <h2>01 // WELCOME</h2>
-                <p>> Initializing welcome sequence...</p>
-                <p>This is your new retro-styled home on the web. It is fast, lightweight, and fully responsive.</p>
-                <p>Edit this text to introduce yourself to the world.</p>
+        <div class="screen">
+            <div id="home" class="page active">
+                <h2>// WELCOME_USER</h2>
+                <div class="type-wrap">
+                    <p>> Initializing portfolio protocol...</p>
+                    <p>> Subject: <b>CREATIVE DEVELOPER</b></p>
+                    <p>> Location: <b>EARTH / WEB</b></p>
+                    <br>
+                    <p>I build digital experiences that live on the edge of the retro and the future. Welcome to my personal terminal.</p>
+                </div>
+                <div style="margin-top: 50px; border: 1px solid var(--neon-blue); padding: 20px; text-align: center;">
+                    <p style="color: var(--neon-blue)">[ CLICK TABS TO NAVIGATE ]</p>
+                </div>
             </div>
 
-            <div class="card">
-                <h2>02 // SERVICES</h2>
-                <p>> Loading skill set...</p>
-                <ul style="list-style-type: square; padding-left: 20px;">
-                    <li>Web Development</li>
-                    <li>Retro Design</li>
-                    <li>Android Hacking</li>
-                    <li>Creative Coding</li>
-                </ul>
-                <a href="#" class="action-btn">HIRE ME</a>
-            </div>
-        </div>
+            <div id="about" class="page">
+                <h2>// DATA_DUMP</h2>
+                <p>An obsession with aesthetics and code. I turn coffee into clean, efficient, and beautiful websites.</p>
+                
+                <br>
+                <h3>> SKILL_SET</h3>
+                
+                <div class="skill-container">
+                    <div class="skill-label">HTML / CSS ARCHITECTURE</div>
+                    <div class="progress-bar"><div class="fill" style="width: 95%"></div></div>
+                </div>
 
-        <div class="terminal-footer">
-            <p>C:\USERS\ADMIN> echo "Made with Gemini AI"</p>
-            <p>C:\USERS\ADMIN> status: online <span class="cursor"></span></p>
-        </div>
+                <div class="skill-container">
+                    <div class="skill-label">JAVASCRIPT LOGIC</div>
+                    <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
+                </div>
+
+                <div class="skill-container">
+                    <div class="skill-label">CYBERPUNK DESIGN</div>
+                    <div class="progress-bar"><div class="fill" style="width: 100%"></div></div>
+                </div>
+            </div>
+
+            <div id="projects" class="page">
+                <h2>// MISSION_LOG</h2>
+                <p>> Loading recent deployments...</p>
+                <br>
+                
+                <div class="grid">
+                    <div class="card">
+                        <h3>PROJECT ALPHA</h3>
+                        <p>A high-speed dashboard built for data visualization.</p>
+                        <p style="color: #666">STATUS: COMPLETED</p>
+                        <a href="#" style="color: var(--neon-pink)">[ VIEW SOURCE ]</a>
+                    </div>
+                    
+                    <div class="card">
+                        <h3>NEON CITY</h3>
+                        <p>An immersive 3D web experience exploring future cities.</p>
+                        <p style="color: #666">STATUS: IN PROGRESS</p>
+                        <a href="#" style="color: var(--neon-pink)">[ VIEW SOURCE ]</a>
+                    </div>
+
+                    <div class="card">
+                        <h3>RETRO.JS</h3>
+                        <p>A javascript library for 8-bit sound effects.</p>
+                        <p style="color: #666">STATUS: ARCHIVED</p>
+                        <a href="#" style="color: var(--neon-pink)">[ VIEW SOURCE ]</a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="contact" class="page">
+                <h2>// UPLINK_REQUEST</h2>
+                <p>Ready to start a mission? Transmit your data below.</p>
+                
+                <form action="mailto:your-email@example.com" method="POST" enctype="text/plain" style="margin-top: 30px;">
+                    <p style="color: var(--neon-green)">> ENTER_NAME:</p>
+                    <input type="text" style="width: 100%; background: #000; border: 1px solid var(--neon-green); color: white; padding: 10px; font-family: inherit;">
+                    
+                    <p style="color: var(--neon-green); margin-top: 20px;">> ENTER_MESSAGE:</p>
+                    <textarea rows="5" style="width: 100%; background: #000; border: 1px solid var(--neon-green); color: white; padding: 10px; font-family: inherit;"></textarea>
+                    
+                    <button type="submit" style="margin-top: 20px; background: var(--neon-green); color: black; border: none; padding: 10px 30px; font-family: inherit; font-size: 1.2rem; cursor: pointer; font-weight: bold;">SEND TRANSMISSION</button>
+                </form>
+                
+                <div style="margin-top: 40px; border-top: 1px dashed #333; padding-top: 20px;">
+                    <p>OR FIND ME ON:</p>
+                    <a href="#" style="color: var(--neon-blue); text-decoration: none; margin-right: 20px;">[ GITHUB ]</a>
+                    <a href="#" style="color: var(--neon-blue); text-decoration: none; margin-right: 20px;">[ TWITTER ]</a>
+                    <a href="#" style="color: var(--neon-blue); text-decoration: none;">[ LINKEDIN ]</a>
+                </div>
+            </div>
+
+        </div> <footer>
+            SESSION ID: 8473-X9 // MEMORY: 64KB // © 2025
+        </footer>
     </div>
 
+    <script>
+        // --- JAVASCRIPT FOR PAGE SWITCHING ---
+        function showPage(pageId) {
+            // 1. Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // 2. Remove 'active' class from all buttons
+            const buttons = document.querySelectorAll('nav button');
+            buttons.forEach(btn => btn.classList.remove('active'));
+
+            // 3. Show the selected page
+            document.getElementById(pageId).classList.add('active');
+
+            // 4. Highlight the clicked button
+            document.getElementById('btn-' + pageId).classList.add('active');
+        }
+
+        // --- MATRIX RAIN EFFECT (Background) ---
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const splitLetters = letters.split("");
+        const fontSize = 15;
+        const columns = canvas.width / fontSize;
+        const drops = [];
+
+        for (let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // Fade effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0aff00"; // Green text
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = splitLetters[Math.floor(Math.random() * splitLetters.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Resize canvas on window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
 </body>
 </html>
