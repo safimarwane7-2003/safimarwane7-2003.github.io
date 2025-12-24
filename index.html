@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MARWANE SAFI // SYSTEM</title>
+    <title>MARWANE SAFI // DIGITAL ARCHIVES</title>
     <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet">
     
     <style>
         /* --- CSS RESET & VARIABLES --- */
         :root {
-            --bg-color: #0d0d0d;
-            --glass-bg: rgba(20, 20, 20, 0.85);
+            --bg-color: #050505;
+            --glass-bg: rgba(10, 10, 10, 0.9);
             --neon-pink: #ff0055;
             --neon-blue: #00f3ff;
             --neon-green: #0aff00;
+            --neon-gold: #ffd700; /* New Color for Money/Donations */
             --text-main: #e0e0e0;
-            --scanline-color: rgba(0, 0, 0, 0.5);
         }
 
         * { box-sizing: border-box; }
@@ -35,185 +35,127 @@
         /* --- BACKGROUND MATRIX EFFECT --- */
         #canvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            opacity: 0.15;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1; opacity: 0.15;
         }
 
         /* --- CRT SCANLINE OVERLAY --- */
         .scanlines {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
-            background-size: 100% 2px, 3px 100%;
-            pointer-events: none;
-            z-index: 100;
+            background-size: 100% 2px, 3px 100%; pointer-events: none; z-index: 100;
         }
 
         /* --- MAIN CONTAINER --- */
         .interface {
-            width: 95%;
-            max-width: 1000px;
-            margin: 20px auto;
+            width: 95%; max-width: 1000px; margin: 20px auto;
             border: 2px solid var(--neon-blue);
             box-shadow: 0 0 20px var(--neon-blue), inset 0 0 20px rgba(0, 243, 255, 0.2);
             background: var(--glass-bg);
             border-radius: 10px;
-            display: flex;
-            flex-direction: column;
-            height: 90vh;
-            position: relative;
+            display: flex; flex-direction: column;
+            height: 90vh; position: relative;
             backdrop-filter: blur(5px);
         }
 
         /* --- HEADER --- */
         header {
-            border-bottom: 2px solid var(--neon-blue);
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            border-bottom: 2px solid var(--neon-blue); padding: 20px;
+            display: flex; justify-content: space-between; align-items: center;
         }
 
         .logo {
-            font-size: 2.5rem;
-            color: var(--neon-blue);
+            font-size: 2.5rem; color: var(--neon-blue);
             text-shadow: 0 0 10px var(--neon-blue);
             animation: flicker 3s infinite;
-            text-transform: uppercase;
-            letter-spacing: 2px;
+            text-transform: uppercase; letter-spacing: 2px;
         }
 
-        .status {
-            font-size: 1rem;
-            color: var(--neon-green);
-        }
-
+        .status { font-size: 1rem; color: var(--neon-green); }
         .blink { animation: blink 1s infinite; }
 
         /* --- NAVIGATION --- */
         nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
+            display: grid; grid-template-columns: 1fr 1fr 1fr 1fr;
             border-bottom: 2px solid var(--neon-blue);
         }
 
         nav button {
-            background: none;
-            border: none;
+            background: none; border: none;
             border-right: 1px solid var(--neon-blue);
-            color: var(--text-main);
-            font-family: 'VT323', monospace;
-            font-size: 1.5rem;
-            padding: 15px 0;
-            cursor: pointer;
-            transition: all 0.3s;
+            color: var(--text-main); font-family: 'VT323', monospace;
+            font-size: 1.5rem; padding: 15px 0;
+            cursor: pointer; transition: all 0.3s;
             text-transform: uppercase;
         }
-
         nav button:last-child { border-right: none; }
         
         nav button:hover, nav button.active {
-            background: var(--neon-blue);
-            color: #000;
+            background: var(--neon-blue); color: #000;
             box-shadow: 0 0 15px var(--neon-blue);
         }
 
         /* --- CONTENT AREA --- */
         .screen {
-            flex-grow: 1;
-            padding: 30px;
-            overflow-y: auto;
-            position: relative;
+            flex-grow: 1; padding: 30px; overflow-y: auto; position: relative;
         }
 
-        .page {
-            display: none; /* Hidden by default */
-            animation: fadeIn 0.5s ease-in-out;
-        }
-
+        .page { display: none; animation: fadeIn 0.5s ease-in-out; }
         .page.active { display: block; }
 
         h2 {
-            font-size: 3rem;
-            margin-top: 0;
-            color: var(--neon-pink);
+            font-size: 3rem; margin-top: 0; color: var(--neon-pink);
             text-shadow: 2px 2px 0px #fff;
             border-bottom: 2px dashed var(--neon-pink);
             display: inline-block;
         }
 
-        /* --- COMPONENT: TYPING TEXT --- */
-        .type-wrap {
-            font-size: 1.5rem;
-            line-height: 1.6;
-            margin-bottom: 20px;
-            max-width: 800px;
-        }
+        .type-wrap { font-size: 1.5rem; line-height: 1.6; margin-bottom: 20px; max-width: 800px; }
 
-        /* --- COMPONENT: SKILL BARS --- */
+        /* --- SKILL BARS --- */
         .skill-container { margin: 20px 0; }
         .skill-label { margin-bottom: 5px; color: var(--neon-green); }
-        .progress-bar {
-            width: 100%;
-            height: 20px;
-            background: #222;
-            border: 1px solid var(--neon-green);
-            margin-bottom: 15px;
-        }
-        .fill {
-            height: 100%;
-            background: var(--neon-green);
-            width: 0%;
-            box-shadow: 0 0 10px var(--neon-green);
-            transition: width 1s ease-out;
-        }
+        .progress-bar { width: 100%; height: 20px; background: #222; border: 1px solid var(--neon-green); margin-bottom: 15px; }
+        .fill { height: 100%; background: var(--neon-green); width: 0%; box-shadow: 0 0 10px var(--neon-green); transition: width 1s ease-out; }
 
-        /* --- COMPONENT: PROJECT CARDS --- */
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-        }
+        /* --- PROJECT CARDS --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .card {
-            border: 1px solid var(--neon-pink);
-            padding: 15px;
-            background: rgba(255, 0, 85, 0.05);
-            transition: transform 0.2s;
+            border: 1px solid var(--neon-pink); padding: 15px;
+            background: rgba(255, 0, 85, 0.05); transition: transform 0.2s;
         }
-        .card:hover {
-            transform: translateY(-5px);
-            background: rgba(255, 0, 85, 0.15);
-            box-shadow: 0 0 15px var(--neon-pink);
-        }
+        .card:hover { transform: translateY(-5px); background: rgba(255, 0, 85, 0.15); box-shadow: 0 0 15px var(--neon-pink); }
         .card h3 { color: var(--neon-blue); margin-top: 0; }
-        
+
+        /* --- DONATION BUTTON STYLE --- */
+        .donate-btn {
+            display: block; width: 100%; text-align: center;
+            background: var(--neon-gold); color: #000;
+            text-decoration: none; font-weight: bold; font-size: 1.5rem;
+            padding: 15px; margin-top: 20px;
+            border: 2px solid #fff; box-shadow: 0 0 15px var(--neon-gold);
+            animation: pulse 2s infinite;
+        }
+        .donate-btn:hover { background: #fff; color: #000; }
+
         /* --- FOOTER --- */
         footer {
-            border-top: 2px solid var(--neon-blue);
-            padding: 10px;
-            text-align: center;
-            font-size: 0.9rem;
-            color: #666;
+            border-top: 2px solid var(--neon-blue); padding: 10px;
+            text-align: center; font-size: 0.9rem; color: #666;
         }
 
         /* --- ANIMATIONS --- */
         @keyframes blink { 50% { opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes flicker {
-            0% { opacity: 1; } 3% { opacity: 0.4; } 6% { opacity: 1; } 7% { opacity: 0.4; } 8% { opacity: 1; }
-            9% { opacity: 1; } 10% { opacity: 0.1; } 11% { opacity: 1; } 100% { opacity: 1; }
-        }
+        @keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(255, 215, 0, 0); } 100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); } }
+        @keyframes flicker { 0% { opacity: 1; } 3% { opacity: 0.4; } 6% { opacity: 1; } 7% { opacity: 0.4; } 8% { opacity: 1; } 9% { opacity: 1; } 10% { opacity: 0.1; } 11% { opacity: 1; } 100% { opacity: 1; } }
 
         /* --- MOBILE TWEAKS --- */
         @media (max-width: 600px) {
             .interface { height: 95vh; margin: 10px auto; width: 95%; }
             nav button { font-size: 1rem; padding: 10px 0; }
             h2 { font-size: 2rem; }
-            .logo { font-size: 1.8rem; } /* Adjusted size for long names on mobile */
+            .logo { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -230,163 +172,141 @@
 
         <nav>
             <button onclick="showPage('home')" class="active" id="btn-home">HOME</button>
-            <button onclick="showPage('about')" id="btn-about">ABOUT</button>
-            <button onclick="showPage('projects')" id="btn-projects">WORK</button>
-            <button onclick="showPage('contact')" id="btn-contact">COMM</button>
+            <button onclick="showPage('about')" id="btn-about">PROFILE</button>
+            <button onclick="showPage('projects')" id="btn-projects">GALLERY</button>
+            <button onclick="showPage('contact')" id="btn-contact">CONNECT</button>
         </nav>
 
         <div class="screen">
             <div id="home" class="page active">
-                <h2>// WELCOME_USER</h2>
+                <h2>// WELCOME_MARWANE</h2>
                 <div class="type-wrap">
-                    <p>> Initializing portfolio protocol...</p>
-                    <p>> Subject: <b>CREATIVE DEVELOPER</b></p>
-                    <p>> Location: <b>EARTH / WEB</b></p>
+                    <p>> Identifying User...</p>
+                    <p>> Identity Verified: <b>MARWANE SAFI</b></p>
+                    <p>> Class: <b>DIGITAL ALCHEMIST</b></p>
                     <br>
-                    <p>I build digital experiences that live on the edge of the retro and the future. Welcome to my personal terminal.</p>
+                    <p>I specialize in the synthesis of AI imagery, video generation, and style transfer. From retro aesthetics to hyper-modern rendering, I create what doesn't exist.</p>
                 </div>
-                <div style="margin-top: 50px; border: 1px solid var(--neon-blue); padding: 20px; text-align: center;">
-                    <p style="color: var(--neon-blue)">[ CLICK TABS TO NAVIGATE ]</p>
+                <div style="margin-top: 50px; border: 1px solid var(--neon-gold); padding: 20px; text-align: center;">
+                    <p style="color: var(--neon-gold)">[ SYSTEM STATUS: OPEN FOR COMMISSIONS ]</p>
                 </div>
             </div>
 
             <div id="about" class="page">
-                <h2>// DATA_DUMP</h2>
-                <p>An obsession with aesthetics and code. I turn coffee into clean, efficient, and beautiful websites.</p>
+                <h2>// BIO_DATA</h2>
+                <p>My work explores the intersection of psychology, gender dynamics, and artificial intelligence. I don't just generate images; I curate digital identities.</p>
                 
                 <br>
-                <h3>> SKILL_SET</h3>
+                <h3>> SYSTEM_STATS</h3>
                 
                 <div class="skill-container">
-                    <div class="skill-label">HTML / CSS ARCHITECTURE</div>
-                    <div class="progress-bar"><div class="fill" style="width: 95%"></div></div>
+                    <div class="skill-label">IMAGE GENERATION / STABLE DIFFUSION</div>
+                    <div class="progress-bar"><div class="fill" style="width: 98%"></div></div>
                 </div>
 
                 <div class="skill-container">
-                    <div class="skill-label">JAVASCRIPT LOGIC</div>
-                    <div class="progress-bar"><div class="fill" style="width: 80%"></div></div>
+                    <div class="skill-label">VIDEO SYNTHESIS</div>
+                    <div class="progress-bar"><div class="fill" style="width: 85%"></div></div>
                 </div>
 
                 <div class="skill-container">
-                    <div class="skill-label">CYBERPUNK DESIGN</div>
-                    <div class="progress-bar"><div class="fill" style="width: 100%"></div></div>
+                    <div class="skill-label">STYLE TRANSFER (GTA/RETRO)</div>
+                    <div class="progress-bar"><div class="fill" style="width: 92%"></div></div>
                 </div>
             </div>
 
             <div id="projects" class="page">
-                <h2>// MISSION_LOG</h2>
-                <p>> Loading recent deployments...</p>
+                <h2>// VISUAL_LOGS</h2>
+                <p>> Retrieving recent renders...</p>
                 <br>
                 
                 <div class="grid">
                     <div class="card">
-                        <h3>PROJECT ALPHA</h3>
-                        <p>A high-speed dashboard built for data visualization.</p>
-                        <p style="color: #666">STATUS: COMPLETED</p>
-                        <a href="#" style="color: var(--neon-pink)">[ VIEW SOURCE ]</a>
+                        <h3>YEARBOOK ANOMALIES</h3>
+                        <p>AI-generated 90s aesthetic portraiture. Transforming modern identities into retro memories.</p>
+                        <p style="color: var(--neon-green)">STATUS: RENDERED</p>
                     </div>
                     
                     <div class="card">
-                        <h3>NEON CITY</h3>
-                        <p>An immersive 3D web experience exploring future cities.</p>
-                        <p style="color: #666">STATUS: IN PROGRESS</p>
-                        <a href="#" style="color: var(--neon-pink)">[ VIEW SOURCE ]</a>
+                        <h3>SAN ANDREAS STYLE</h3>
+                        <p>Custom artwork emulating the iconic cover art style of Grand Theft Auto.</p>
+                        <p style="color: var(--neon-green)">STATUS: COMPLETED</p>
                     </div>
 
                     <div class="card">
-                        <h3>RETRO.JS</h3>
-                        <p>A javascript library for 8-bit sound effects.</p>
-                        <p style="color: #666">STATUS: ARCHIVED</p>
-                        <a href="#" style="color: var(--neon-pink)">[ VIEW SOURCE ]</a>
+                        <h3>NEURAL VOICE</h3>
+                        <p>Experimental video synthesis combining AI avatars with voice cloning technology.</p>
+                        <p style="color: var(--neon-blue)">STATUS: PROCESSING</p>
                     </div>
                 </div>
             </div>
 
             <div id="contact" class="page">
-                <h2>// UPLINK_REQUEST</h2>
-                <p>Ready to start a mission? Transmit your data below.</p>
+                <h2>// TRANSMISSION</h2>
+                <p>Initiate contact protocol or support the system infrastructure.</p>
                 
-                <form action="mailto:your-email@example.com" method="POST" enctype="text/plain" style="margin-top: 30px;">
-                    <p style="color: var(--neon-green)">> ENTER_NAME:</p>
-                    <input type="text" style="width: 100%; background: #000; border: 1px solid var(--neon-green); color: white; padding: 10px; font-family: inherit;">
+                <div style="border: 2px dashed var(--neon-gold); padding: 20px; margin-bottom: 30px; background: rgba(255, 215, 0, 0.05);">
+                    <h3 style="color: var(--neon-gold); margin-top: 0;">>> SUPPORT THE CREATOR</h3>
+                    <p>Fuel the GPU. Keep the servers running.</p>
                     
-                    <p style="color: var(--neon-green); margin-top: 20px;">> ENTER_MESSAGE:</p>
-                    <textarea rows="5" style="width: 100%; background: #000; border: 1px solid var(--neon-green); color: white; padding: 10px; font-family: inherit;"></textarea>
-                    
-                    <button type="submit" style="margin-top: 20px; background: var(--neon-green); color: black; border: none; padding: 10px 30px; font-family: inherit; font-size: 1.2rem; cursor: pointer; font-weight: bold;">SEND TRANSMISSION</button>
-                </form>
+                    <a href="https://paypal.me/Marwanesafi7" target="_blank" class="donate-btn">
+                        $ DONATE / SUPPORT $
+                    </a>
+                </div>
+
+                <p style="color: var(--neon-green)">> DIRECT_UPLINK:</p>
+                <p><a href="mailto:safimarwane73@gmail.com" style="color: white; text-decoration: none; font-size: 1.2rem;">contact@marwanesafi.com</a></p>
                 
                 <div style="margin-top: 40px; border-top: 1px dashed #333; padding-top: 20px;">
-                    <p>OR FIND ME ON:</p>
-                    <a href="#" style="color: var(--neon-blue); text-decoration: none; margin-right: 20px;">[ GITHUB ]</a>
-                    <a href="#" style="color: var(--neon-blue); text-decoration: none; margin-right: 20px;">[ TWITTER ]</a>
-                    <a href="#" style="color: var(--neon-blue); text-decoration: none;">[ LINKEDIN ]</a>
+                    <a href="https://www.instagram.com/mar1_safi?igsh=M3Rkb3NwY2g2amdt" style="color: var(--neon-blue); margin-right: 20px;">[ INSTAGRAM ]</a>
+                    <a href="#" style="color: var(--neon-blue);">[ TWITTER ]</a>
                 </div>
             </div>
 
-        </div> <footer>
-            SESSION ID: 8473-X9 // MEMORY: 64KB // © 2025
+        </div>
+
+        <footer>
+            MARWANE SAFI © 2025 // SYSTEM ID: 99-X // RABAT_NODE
         </footer>
     </div>
 
     <script>
-        // --- JAVASCRIPT FOR PAGE SWITCHING ---
+        /* PAGE SWITCHING LOGIC */
         function showPage(pageId) {
-            // 1. Hide all pages
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => page.classList.remove('active'));
-
-            // 2. Remove 'active' class from all buttons
             const buttons = document.querySelectorAll('nav button');
             buttons.forEach(btn => btn.classList.remove('active'));
-
-            // 3. Show the selected page
             document.getElementById(pageId).classList.add('active');
-
-            // 4. Highlight the clicked button
             document.getElementById('btn-' + pageId).classList.add('active');
         }
 
-        // --- MATRIX RAIN EFFECT (Background) ---
+        /* MATRIX RAIN BG */
         const canvas = document.getElementById('canvas');
         const ctx = canvas.getContext('2d');
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
-        const letters = "01010101ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const letters = "MS01MS01MARWANE"; // Personalized Matrix Rain
         const splitLetters = letters.split("");
         const fontSize = 15;
         const columns = canvas.width / fontSize;
         const drops = [];
-
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
+        for (let x = 0; x < columns; x++) { drops[x] = 1; }
 
         function drawMatrix() {
-            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; // Fade effect
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = "#0aff00"; // Green text
+            ctx.fillStyle = "#0aff00";
             ctx.font = fontSize + "px monospace";
-
             for (let i = 0; i < drops.length; i++) {
                 const text = splitLetters[Math.floor(Math.random() * splitLetters.length)];
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) { drops[i] = 0; }
                 drops[i]++;
             }
         }
         setInterval(drawMatrix, 50);
-
-        // Resize canvas on window resize
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
+        window.addEventListener('resize', () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight; });
     </script>
 </body>
 </html>
