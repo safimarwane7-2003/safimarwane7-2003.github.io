@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MARWANE SAFI // NEXT GEN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- CORE AESTHETICS --- */
+        :root {
+            --neon-blue: #00f3ff;
+            --neon-purple: #bc13fe;
+            --neon-gold: #FFD700;
+            --bg-dark: #000000;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            margin: 0;
+            height: 100vh;
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            overflow: hidden; /* No scrolling allowed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- THE ANIMATED BACKGROUND --- */
+        #particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #000000 100%);
+        }
+
+        /* --- THE GLASS CARD --- */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid var(--border);
+            border-top: 1px solid rgba(255, 255, 255, 0.2); /* Top light highlight */
+            border-radius: 30px;
+            padding: 50px 30px;
+            width: 85%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0, 0, 0, 0.5);
+            position: relative;
+            animation: floatCard 6s ease-in-out infinite;
+        }
+
+        /* --- HOLOGRAPHIC PROFILE --- */
+        .profile-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 25px auto;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 2;
+        }
+
+        /* The Spinning Scanner Ring */
+        .scanner {
+            position: absolute;
+            top: -15px; left: -15px; right: -15px; bottom: -15px;
+            border: 2px solid transparent;
+            border-top: 2px solid var(--neon-blue);
+            border-bottom: 2px solid var(--neon-purple);
+            border-radius: 50%;
+            animation: spin 3s linear infinite;
+            z-index: 1;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        /* --- TEXT STYLES --- */
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            margin: 0;
+            background: linear-gradient(90deg, #fff, #aaa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .badge-container {
+            margin: 15px 0 25px 0;
+        }
+
+        .badge {
+            background: rgba(255, 215, 0, 0.1);
+            color: var(--neon-gold);
+            border: 1px solid var(--neon-gold);
+            padding: 6px 16px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .bio {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 35px;
+            font-size: 1.05rem;
+            font-weight: 300;
+        }
+
+        /* --- LIQUID GOLD BUTTON --- */
+        .btn-money {
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #FFD700 0%, #ff9900 100%);
+            color: #000;
+            text-decoration: none;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 800;
+            font-size: 1.1rem;
+            padding: 18px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.4);
+            overflow: hidden;
+            transition: transform 0.2s;
+        }
+
+        /* The "Sheen" effect passing over the button */
+        .btn-money::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.6), transparent);
+            animation: shine 3s infinite;
+        }
+
+        .btn-money:active { transform: scale(0.96); }
+        .btn-money i { margin-right: 10px; font-size: 1.3rem; }
+
+        /* --- SOCIAL ICONS --- */
+        .social-grid {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+        }
+
+        .social-icon {
+            width: 50px; height: 50px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: #fff; font-size: 1.4rem;
+            text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .social-icon:hover {
+            background: white;
+            color: black;
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 0 20px white;
+        }
+
+        /* --- FOOTER / TRACKER --- */
+        .tracker-area {
+            position: fixed; bottom: 15px; width: 100%; text-align: center;
+            font-size: 0.7rem; color: rgba(255, 255, 255, 0.3); letter-spacing: 1px;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes floatCard { 0% { transform: translateY(0px); } 50% { transform: translateY(-10px); } 100% { transform: translateY(0px); } }
+        @keyframes shine { 0% { left: -100%; } 20% { left: 100%; } 100% { left: 100%; } }
+
+    </style>
+</head>
+<body>
+
+    <canvas id="particles"></canvas>
+
+    <div class="card">
+        
+        <div class="profile-wrapper">
+            <div class="scanner"></div> <img src="me.png" alt="Marwane Safi" class="profile-pic">
+        </div>
+
+        <h1>MARWANE SAFI</h1>
+        
+        <div class="badge-container">
+            <span class="badge">SYSTEM UPGRADING...</span>
+        </div>
+
+        <div class="bio">
+            Official Portal. <br>
+            I am currently architecting the content for this domain. <br>
+            <span style="color: var(--neon-blue)">// EST. 2025</span>
+        </div>
+
+        <a href=""https://paypal.me/Marwanesafi7" class="btn-money">
+            <i class="fa-solid fa-dollar-sign"></i> DONATE / SUPPORT
+        </a>
+
+        <div class="social-grid">
+            <a href="https://www.instagram.com/mar1_safi?igsh=M3Rkb3NwY2g2amdt" class="social-icon"><i class="fa-brands fa-instagram"></i></a>
+            <a href="https://www.facebook.com/marwane.safi.2025" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="mailto:safimarwane73@gmail.com" class="social-icon"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+
+    </div>
+
+    <div class="tracker-area">
+        SECURE CONNECTION ESTABLISHED
+        <br><!-- Default Statcounter code for Personal website
+http://safimarwane7-2003.github.io -->
+<script type="text/javascript">
+var sc_project=13194677; 
+var sc_invisible=1; 
+var sc_security="753fbc9f"; 
+</script>
+<script type="text/javascript"
+src="https://www.statcounter.com/counter/counter.js"
+async></script>
+<noscript><div class="statcounter"><a title="Web Analytics"
+href="https://statcounter.com/" target="_blank"><img
+class="statcounter"
+src="https://c.statcounter.com/13194677/0/753fbc9f/1/"
+alt="Web Analytics"
+referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
+<!-- End of Statcounter Code -->
+        </div>
+
+    <script>
+        /* --- AI PARTICLE BRAIN SYSTEM --- */
+        /* This script creates the "Neural Network" background effect */
+        const canvas = document.getElementById('particles');
+        const ctx = canvas.getContext('2d');
+        
+        let width, height;
+        let particles = [];
+
+        // Configuration
+        const particleCount = 60; // How many dots
+        const connectionDistance = 150; // How far to draw lines
+        const speed = 0.5;
+
+        function resize() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+        }
+        window.addEventListener('resize', resize);
+        resize();
+
+        class Particle {
+            constructor() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * speed;
+                this.vy = (Math.random() - 0.5) * speed;
+                this.size = Math.random() * 2 + 1;
+            }
+
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+
+                // Bounce off edges
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            }
+
+            draw() {
+                ctx.fillStyle = "rgba(0, 243, 255, 0.5)"; // Neon Blue dots
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        // Initialize Particles
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, width, height);
+            
+            // Draw particles and lines
+            for (let i = 0; i < particles.length; i++) {
+                particles[i].update();
+                particles[i].draw();
+
+                // Check connections
+                for (let j = i; j < particles.length; j++) {
+                    const dx = particles[i].x - particles[j].x;
+                    const dy = particles[i].y - particles[j].y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionDistance) {
+                        ctx.strokeStyle = `rgba(0, 243, 255, ${1 - distance/connectionDistance})`;
+                        ctx.lineWidth = 0.5;
+                        ctx.beginPath();
+                        ctx.moveTo(particles[i].x, particles[i].y);
+                        ctx.lineTo(particles[j].x, particles[j].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    </script>
+</body>
+</html>
