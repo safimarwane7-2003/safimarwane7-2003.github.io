@@ -284,6 +284,15 @@ referrerPolicy="no-referrer-when-downgrade"></a></div></noscript>
         </div>
 
     <script>
+        /* --- REMOVE BOOT SCREEN --- */
+window.addEventListener('load', () => {
+    setTimeout(() => {
+        const screen = document.getElementById('boot-screen');
+        screen.style.opacity = '0';
+        setTimeout(() => { screen.style.display = 'none'; }, 800);
+    }, 2200); // Waits 2.2 seconds before fading
+});
+
         /* --- AI PARTICLE BRAIN SYSTEM --- */
         /* This script creates the "Neural Network" background effect */
         const canvas = document.getElementById('particles');
